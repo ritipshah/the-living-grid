@@ -8,11 +8,12 @@ technical frames separated by thick black gutters. Every frame is original SVG d
 the projects themselves: captured sensor data, scoring rules, graph structures and document
 flows. The grid is the interface itself:
 
-- **Hero:** a 12 × 6 sheet. On desktop, the hovered frame's columns and rows widen and the
-  other frames recede. Technical frames change on a slow cycle with a shutter wipe, and an
-  orange marker shows the newest one. Each caption states the frame's source, for example
-  "Firesense · captured data" or "Nexus · synthetic IDs". The cycle pauses on hover, off-screen, in a hidden
-  tab, or when `prefers-reduced-motion` is set.
+- **Hero, The Knight's Journey:** an 8 × 8 board where a knight moves by the real chess
+  rules. Legal moves are highlighted. Five marked squares lead to the four projects and to
+  About. Visitors can move square by square, or choose a destination, and the knight then
+  takes the shortest legal route (breadth-first search) with an animated trail. An
+  **Explore all projects** button skips the board entirely. Legal moves are real buttons, so
+  the board works by keyboard, and moves jump instantly when `prefers-reduced-motion` is set.
 - **Selected work:** four project frames in an asymmetric layout with technical frames
   between them. Category filters rearrange the sheet with FLIP transitions, and each frame
   opens an internal case study through a view transition.
@@ -97,7 +98,7 @@ public/
 scripts/              portrait + OG generation (sharp, run on demand)
 src/
   data/               all copy, plus Firesense session data and the illustrative Nexus graph
-  components/         Nav, Hero, WorkGrid, About, Toolkit, Record, Contact, Footer
+  components/         Nav, Hero (knight board), WorkGrid, About, Record, Contact, Footer
   pages/              Home, CaseStudy, Colophon, NotFound
   visuals/            per-project SVG tiles, case-study interactives, Frames.jsx (grid frames)
   hooks/              reduced motion, media queries, active section, document meta

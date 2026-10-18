@@ -28,6 +28,11 @@ export default function About() {
             score is computed and explained, and how a model&rsquo;s output reaches the person who has to act on it.
             That&rsquo;s why my projects usually include the schema and the interface, not only the model.
           </p>
+          <p>
+            I work mostly in Python, with NumPy, Pandas, Scikit-learn and SciPy for analysis and modelling, and Matplotlib,
+            Seaborn, Tableau and Power BI for visualization. For databases I use MySQL and PostgreSQL, alongside C++,
+            JavaScript, React.js and Next.js, in Jupyter, Google Colab and VS Code.
+          </p>
           <p>I&rsquo;m open to internships and research opportunities in machine learning, NLP and applied analytics.</p>
         </div>
 

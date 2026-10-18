@@ -18,7 +18,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="section contact shell" aria-labelledby="contact-title">
-      <SectionHead no="05" kicker="Contact" title="Write to me" id="contact-title">
+      <SectionHead no="04" kicker="Contact" title="Write to me" id="contact-title">
         For internships, research work, collaborations or questions about a project. Email is the best way to reach me.
       </SectionHead>
 

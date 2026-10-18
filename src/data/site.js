@@ -25,55 +25,6 @@ export const EDUCATION = {
   ],
 };
 
-// `seenIn` links a tool to project indices only where the project's own code
-// or requirements files confirm it.
-export const TOOLKIT = [
-  {
-    id: 'prog',
-    label: 'Programming',
-    tools: [
-      { name: 'Python', seenIn: ['02', '03'] },
-      { name: 'C++' },
-      { name: 'JavaScript', seenIn: ['01', '02'] },
-    ],
-  },
-  {
-    id: 'ml',
-    label: 'Data science & ML',
-    tools: [
-      { name: 'NumPy', seenIn: ['03'] },
-      { name: 'Pandas', seenIn: ['03'] },
-      { name: 'Scikit-learn', seenIn: ['03'] },
-      { name: 'SciPy' },
-    ],
-  },
-  {
-    id: 'viz',
-    label: 'Visualization & analytics',
-    tools: [{ name: 'Tableau' }, { name: 'Power BI' }, { name: 'Matplotlib' }, { name: 'Seaborn' }],
-  },
-  {
-    id: 'web',
-    label: 'Web development',
-    tools: [{ name: 'React.js' }, { name: 'Next.js' }],
-  },
-  {
-    id: 'db',
-    label: 'Databases',
-    tools: [{ name: 'PostgreSQL' }, { name: 'MySQL', seenIn: ['01', '02'] }],
-  },
-  {
-    id: 'tools',
-    label: 'Tools',
-    tools: [
-      { name: 'GitHub', seenIn: ['01', '02', '03'] },
-      { name: 'Jupyter Notebook' },
-      { name: 'Google Colab' },
-      { name: 'VS Code' },
-    ],
-  },
-];
-
 export const EXPERIENCE = [
   {
     role: 'Volunteer Educator',

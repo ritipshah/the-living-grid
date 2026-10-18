@@ -17,7 +17,7 @@ function Entry({ dates, title, sub, body }) {
 export default function Record() {
   return (
     <section id="record" className="section record shell" aria-labelledby="record-title">
-      <SectionHead no="04" kicker="Record" title="Experience & certifications" id="record-title" />
+      <SectionHead no="03" kicker="Record" title="Experience & certifications" id="record-title" />
       <div className="record__grid">
         <div className="record__col">
           <h3 className="record__head label label--accent">Experience</h3>

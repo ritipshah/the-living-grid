@@ -1,122 +1,213 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FRAMES, TechFrame } from '../visuals/Frames.jsx';
 import { PROJECTS } from '../data/projects.js';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion.js';
-import { useMedia } from '../hooks/useMedia.js';
 import SectionLink from './SectionLink.jsx';
 
-// Desktop track spans for each tile: [colStart, colEnd, rowStart, rowEnd]
-// on a 12 × 6 grid. Used to widen the hovered tile's tracks.
-const SPANS = {
-  word: [1, 7, 1, 4],
-  a: [7, 10, 1, 5],
-  b: [10, 13, 1, 3],
-  title: [10, 13, 3, 5],
-  intro: [1, 5, 4, 7],
-  c: [5, 7, 4, 7],
-  d: [7, 10, 5, 7],
-  index: [10, 13, 5, 7],
-};
+/* ─── The Knight's Journey ─────────────────────────────────────────
+   An 8 × 8 board on which a knight moves by the real rules (an L: two
+   squares one way, one square at right angles). Five squares are
+   destinations: the four projects and About. Visitors either move square
+   by square, or pick a destination and the knight takes the shortest
+   legal route there (breadth-first search). */
 
-// Each frame tile cycles through its own small pool of technical frames.
-const POOLS = {
-  a: ['graph', 'samples', 'source'],
-  b: ['gas', 'matrix', 'ledger'],
-  c: ['barcode', 'condense', 'risk'],
-  d: ['climate', 'ledger', 'graph'],
-};
-// Design size of each tile's frame (CSS scales it to the tile).
-const SIZE = { a: [300, 480], b: [340, 260], c: [220, 420], d: [340, 260] };
-const CYCLE_ORDER = ['a', 'c', 'b', 'd'];
-const CYCLE_MS = 4200;
+const FILES = 'abcdefgh';
+const START = 'g1';
+const STEP_MS = 420;
 
-function tracks(n, start, end, grow) {
-  return Array.from({ length: n }, (_, i) =>
-    i + 1 >= start && i + 1 < end ? `${grow}fr` : '1fr',
-  ).join(' ');
+const toXY = (sq) => [FILES.indexOf(sq[0]), 8 - Number(sq[1])]; // x: 0–7 left→right, y: 0–7 top→bottom
+const toSq = (x, y) => `${FILES[x]}${8 - y}`;
+const JUMPS = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
+
+function knightMoves(sq) {
+  const [x, y] = toXY(sq);
+  return JUMPS.map(([dx, dy]) => [x + dx, y + dy])
+    .filter(([a, b]) => a >= 0 && a < 8 && b >= 0 && b < 8)
+    .map(([a, b]) => toSq(a, b));
 }
 
-function FrameTile({ id, frameKey, prevKey, live, onEnter }) {
-  const f = FRAMES[frameKey];
-  const [w, h] = SIZE[id];
+// Shortest knight route from → to, inclusive of both ends.
+function route(from, to) {
+  const prev = { [from]: null };
+  const queue = [from];
+  while (queue.length) {
+    const cur = queue.shift();
+    if (cur === to) break;
+    for (const n of knightMoves(cur)) {
+      if (!(n in prev)) {
+        prev[n] = cur;
+        queue.push(n);
+      }
+    }
+  }
+  const path = [];
+  for (let s = to; s; s = prev[s]) path.unshift(s);
+  return path;
+}
+
+const bySlug = Object.fromEntries(PROJECTS.map((p) => [p.slug, p]));
+const DESTS = [
+  { sq: 'c6', mark: '01', project: bySlug['cyber-threat-intelligence'] },
+  { sq: 'f5', mark: '02', project: bySlug['nexus-criminal-intelligence'] },
+  { sq: 'b3', mark: '03', project: bySlug.firesense },
+  { sq: 'h7', mark: '04', project: bySlug['legal-document-summarization'] },
+  {
+    sq: 'd8',
+    mark: 'Ab',
+    about: true,
+    title: 'About Riti',
+    short: 'Background, education, interests and the tools I work with.',
+  },
+].map((d) => ({ ...d, title: d.title ?? d.project.title, short: d.short ?? d.project.short }));
+const DEST_AT = Object.fromEntries(DESTS.map((d) => [d.sq, d]));
+
+function KnightPiece() {
   return (
-    <div className={`hero__tile hero__tile--photo hero__${id}`} onPointerEnter={onEnter} aria-hidden="true">
-      {prevKey && <TechFrame name={prevKey} w={w} h={h} className="hero__img hero__img--prev" />}
-      <TechFrame key={frameKey} name={frameKey} w={w} h={h} className={`hero__img ${prevKey ? 'hero__img--in' : ''}`} />
-      <span className={`hero__frame label ${live ? 'is-live' : ''}`}>
-        <span className="marker" />
-        <span>
-          Fr. {f.no} · {f.title}
-          <small>{f.source}</small>
-        </span>
-      </span>
-    </div>
+    <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <path
+        d="M27 86h48v-7h-4c-1-15 5-27 3-41-2-15-13-25-28-27l-4-8-6 10c-8 5-14 14-18 24l-4 12c-1 5 4 9 9 6l8-6c6 0 11-3 13-8 1 9-6 17-12 26-3 4-4 8-4 12h-4z"
+        fill="#ece8e1"
+        stroke="#0b0b0b"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
+      />
+      <circle cx="47" cy="29" r="3.2" fill="#0b0b0b" />
+      <rect x="24" y="86" width="54" height="7" fill="#e8590c" />
+    </svg>
   );
 }
 
+const center = (sq) => {
+  const [x, y] = toXY(sq);
+  return `${x + 0.5},${y + 0.5}`;
+};
+
 export default function Hero() {
   const reduced = usePrefersReducedMotion();
-  const desktop = useMedia('(min-width: 1100px) and (hover: hover) and (pointer: fine)');
-  const [hovered, setHovered] = useState(null);
-  const [frames, setFrames] = useState({ a: 0, b: 0, c: 0, d: 0 });
-  const [prev, setPrev] = useState({});
-  const [live, setLive] = useState(null);
-  const ref = useRef(null);
-  const visible = useRef(true);
-  const step = useRef(0);
-  const framesRef = useRef(frames);
+  const [pos, setPos] = useState(START);
+  const [trail, setTrail] = useState([START]);
+  const [moving, setMoving] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [announce, setAnnounce] = useState('');
+  const timers = useRef([]);
+  const boardRef = useRef(null);
 
-  // Pause the frame cycle while the hero is off-screen.
-  useEffect(() => {
-    const io = new IntersectionObserver(([e]) => {
-      visible.current = e.isIntersecting;
+  const clearTimers = () => {
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+  };
+  useEffect(() => clearTimers, []);
+
+  const arrive = (sq) => {
+    const d = DEST_AT[sq];
+    setAnnounce(
+      d
+        ? `Knight reached ${sq}: ${d.title}. Open it from the destination panel.`
+        : `Knight to ${sq}. ${knightMoves(sq).length} legal moves.`,
+    );
+  };
+
+  const moveTo = (sq) => {
+    if (moving || !knightMoves(pos).includes(sq)) return;
+    setPos(sq);
+    setTrail((t) => [...t, sq]);
+    arrive(sq);
+    // The clicked square is now the knight's square (not a button), so keep
+    // keyboard focus on the board; Tab then reaches the new legal moves.
+    boardRef.current?.focus({ preventScroll: true });
+  };
+
+  const travel = (dest) => {
+    if (moving) return;
+    clearTimers();
+    const path = route(pos, dest.sq).slice(1);
+    if (!path.length) {
+      arrive(dest.sq);
+      return;
+    }
+    if (reduced) {
+      setPos(dest.sq);
+      setTrail((t) => [...t, ...path]);
+      arrive(dest.sq);
+      return;
+    }
+    setMoving(true);
+    setAnnounce(`Knight travelling to ${dest.title}: ${path.length} move${path.length === 1 ? '' : 's'}.`);
+    path.forEach((sq, i) => {
+      timers.current.push(
+        setTimeout(() => {
+          setPos(sq);
+          setTrail((t) => [...t, sq]);
+          if (i === path.length - 1) {
+            setMoving(false);
+            arrive(sq);
+          }
+        }, (i + 1) * STEP_MS),
+      );
     });
-    if (ref.current) io.observe(ref.current);
-    return () => io.disconnect();
-  }, []);
+  };
 
-  useEffect(() => {
-    if (reduced) return undefined;
-    const t = setInterval(() => {
-      if (!visible.current || document.hidden || hovered) return;
-      const id = CYCLE_ORDER[step.current % CYCLE_ORDER.length];
-      step.current += 1;
-      const cur = framesRef.current;
-      const next = { ...cur, [id]: (cur[id] + 1) % POOLS[id].length };
-      framesRef.current = next;
-      setPrev((p) => ({ ...p, [id]: POOLS[id][cur[id]] }));
-      setFrames(next);
-      setLive(id);
-    }, CYCLE_MS);
-    return () => clearInterval(t);
-  }, [reduced, hovered]);
+  const reset = () => {
+    clearTimers();
+    setMoving(false);
+    setPos(START);
+    setTrail([START]);
+    setAnnounce('Knight returned to g1.');
+  };
 
-  // Always emit explicit track lists on desktop so the browser can
-  // interpolate between the resting and expanded states.
-  let style;
-  if (desktop && !reduced) {
-    const [c0, c1, r0, r1] = hovered ? SPANS[hovered] : [0, 0, 0, 0];
-    style = {
-      '--cols': tracks(12, c0, c1, 1.45),
-      '--rows': tracks(6, r0, r1, 1.25),
-    };
+  const valid = new Set(moving ? [] : knightMoves(pos));
+  const here = DEST_AT[pos];
+  const previewPath = preview && !moving ? route(pos, preview) : null;
+  const [kx, ky] = toXY(pos);
+
+  const squares = [];
+  for (let y = 0; y < 8; y += 1) {
+    for (let x = 0; x < 8; x += 1) {
+      const sq = toSq(x, y);
+      const dest = DEST_AT[sq];
+      const cls = [
+        'sq',
+        (x + y) % 2 ? 'sq--dark' : 'sq--light',
+        dest && 'sq--dest',
+        valid.has(sq) && 'is-valid',
+        sq === pos && 'is-here',
+        preview === sq && 'is-preview',
+      ]
+        .filter(Boolean)
+        .join(' ');
+      const inner = (
+        <>
+          {dest && <span className="sq__mark">{dest.mark}</span>}
+          {x === 0 && <span className="sq__rank">{8 - y}</span>}
+          {y === 7 && <span className="sq__file">{FILES[x]}</span>}
+        </>
+      );
+      squares.push(
+        valid.has(sq) ? (
+          <button
+            key={sq}
+            type="button"
+            className={cls}
+            onClick={() => moveTo(sq)}
+            aria-label={`Move knight to ${sq}${dest ? `, ${dest.title}` : ''}`}
+          >
+            {inner}
+          </button>
+        ) : (
+          <div key={sq} className={cls} aria-hidden="true">
+            {inner}
+          </div>
+        ),
+      );
+    }
   }
 
-  const enter = (id) => () => desktop && setHovered(id);
-
   return (
-    <section
-      ref={ref}
-      className={`hero shell ${hovered ? 'is-hovering' : ''}`}
-      aria-labelledby="hero-title"
-      style={style}
-      onPointerLeave={() => setHovered(null)}
-    >
-      <div className="hero__tile hero__word" onPointerEnter={enter('word')}>
+    <section className="hero shell" aria-labelledby="hero-title">
+      <div className="hero__tile hero__word">
         <div className="hero__word-top">
           <span className="label">Portfolio · 2026</span>
-          <span className="label">Index of work</span>
+          <span className="label">The Living Grid</span>
         </div>
         <h1 id="hero-title" className="hero__name display">
           <span>Riti</span>
@@ -125,29 +216,14 @@ export default function Hero() {
         <p className="hero__word-foot label">Data Science · NMIMS · Mumbai</p>
       </div>
 
-      <FrameTile id="a" frameKey={POOLS.a[frames.a]} prevKey={prev.a} live={live === 'a'} onEnter={enter('a')} />
-      <FrameTile id="b" frameKey={POOLS.b[frames.b]} prevKey={prev.b} live={live === 'b'} onEnter={enter('b')} />
-
-      <div className="hero__tile hero__title" onPointerEnter={enter('title')}>
-        <span className="label label--accent">
-          <span className="marker" /> Exhibition
-        </span>
-        <p className="hero__title-text">
-          <span className="serif">The</span> Living Grid
-        </p>
-        <p className="hero__title-note">
-          A contact sheet of four projects, drawn from their data, rules and structures. Frames shift as you look; each project opens into a full case study.
-        </p>
-      </div>
-
-      <div className="hero__tile hero__intro" onPointerEnter={enter('intro')}>
+      <div className="hero__tile hero__intro">
         <p className="hero__intro-text">
           Data Science student working with <em>machine learning</em>, <em>NLP</em> and <em>intelligent systems</em>. I like building
           the whole system around a model: the data, the database and the interface someone actually uses.
         </p>
         <div className="hero__actions">
           <SectionLink id="work" className="btn btn--solid">
-            View the work <span aria-hidden="true">↓</span>
+            Explore all projects <span aria-hidden="true">↓</span>
           </SectionLink>
           <SectionLink id="about" className="btn">
             About
@@ -155,25 +231,108 @@ export default function Hero() {
         </div>
       </div>
 
-      <FrameTile id="c" frameKey={POOLS.c[frames.c]} prevKey={prev.c} live={live === 'c'} onEnter={enter('c')} />
-      <FrameTile id="d" frameKey={POOLS.d[frames.d]} prevKey={prev.d} live={live === 'd'} onEnter={enter('d')} />
+      <div className="hero__tile hero__board">
+        <div className="board__bar">
+          <span className="label">
+            <span className="marker" /> Knight on <b>{pos}</b> · {moving ? 'moving' : `${valid.size} legal moves`}
+          </span>
+          <button type="button" className="board__reset label" onClick={reset} disabled={pos === START && trail.length === 1}>
+            Reset
+          </button>
+        </div>
+        <div className="board__wrap">
+          <div
+            ref={boardRef}
+            tabIndex={-1}
+            className={`board ${moving ? 'is-moving' : ''}`}
+            role="group"
+            aria-label={`Chessboard. The knight is on ${pos}. Legal moves are buttons.`}
+          >
+            {squares}
+            <svg className="board__trail" viewBox="0 0 8 8" aria-hidden="true">
+              {trail.length > 1 && <polyline points={trail.map(center).join(' ')} />}
+              {previewPath && previewPath.length > 1 && (
+                <polyline className="is-preview" points={previewPath.map(center).join(' ')} />
+              )}
+            </svg>
+            <div
+              className="board__knight"
+              style={{ transform: `translate(${kx * 100}%, ${ky * 100}%)` }}
+              aria-hidden="true"
+            >
+              <KnightPiece />
+            </div>
+          </div>
+        </div>
+        <p className="sr-only" aria-live="polite">
+          {announce}
+        </p>
+      </div>
 
-      <nav className="hero__tile hero__index" aria-label="Projects" onPointerEnter={enter('index')}>
-        <span className="label">Index · 01–04</span>
-        <ol>
-          {PROJECTS.map((p) => (
-            <li key={p.slug}>
-              <Link to={`/work/${p.slug}`} viewTransition>
-                <span className="label">{p.index}</span>
-                <span className="hero__index-title">{p.shortTitle}</span>
-                <span className="hero__index-arrow" aria-hidden="true">
-                  →
-                </span>
-              </Link>
-            </li>
-          ))}
+      <div className="hero__tile hero__journey">
+        <div className="journey__head">
+          <span className="label label--accent">
+            <span className="marker" /> Exhibition
+          </span>
+          <h2 className="journey__title">
+            <span className="serif">The</span> Knight&rsquo;s Journey
+          </h2>
+          <p className="journey__note">
+            Move the knight in an L across the board, or pick a destination and it will take the shortest legal route.
+          </p>
+        </div>
+
+        <div className={`journey__card ${here ? 'is-arrived' : ''}`}>
+          {here ? (
+            <>
+              <p className="label label--accent">
+                Arrived · {here.sq} · {here.mark}
+              </p>
+              <h3 className="journey__card-title">{here.title}</h3>
+              <p className="journey__card-text">{here.short}</p>
+              {here.about ? (
+                <SectionLink id="about" className="btn btn--solid">
+                  Read about Riti <span aria-hidden="true">→</span>
+                </SectionLink>
+              ) : (
+                <Link to={`/work/${here.project.slug}`} viewTransition className="btn btn--solid">
+                  Open case study <span aria-hidden="true">→</span>
+                </Link>
+              )}
+            </>
+          ) : (
+            <p className="journey__card-text">
+              Five squares are marked: four projects and About. Land on one to open it.
+            </p>
+          )}
+        </div>
+
+        <ol className="journey__list" aria-label="Destinations">
+          {DESTS.map((d) => {
+            const steps = route(pos, d.sq).length - 1;
+            return (
+              <li key={d.sq}>
+                <button
+                  type="button"
+                  className={`journey__dest ${pos === d.sq ? 'is-here' : ''}`}
+                  onClick={() => travel(d)}
+                  onPointerEnter={() => setPreview(d.sq)}
+                  onPointerLeave={() => setPreview(null)}
+                  onFocus={() => setPreview(d.sq)}
+                  onBlur={() => setPreview(null)}
+                  aria-disabled={moving}
+                >
+                  <span className="label">{d.mark}</span>
+                  <span className="journey__dest-title">{d.about ? 'About' : d.project.shortTitle}</span>
+                  <span className="journey__dest-meta label">
+                    {d.sq} · {steps === 0 ? 'here' : `${steps} move${steps === 1 ? '' : 's'}`}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
         </ol>
-      </nav>
+      </div>
     </section>
   );
 }

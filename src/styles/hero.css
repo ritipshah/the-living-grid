@@ -1,90 +1,21 @@
-/* ─── Hero · the contact sheet ──────────────────────────────────── */
+/* ─── Hero · The Knight's Journey on the Living Grid ─────────────── */
 .hero {
   display: grid;
   gap: var(--gutter);
   padding-top: calc(var(--nav-h) + var(--gutter));
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-areas:
-    'word word'
-    'a    b'
-    'a    title'
-    'intro intro'
-    'c    d'
-    'index index';
-  grid-auto-rows: auto;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'word' 'intro' 'board' 'journey';
 }
-
 .hero__word { grid-area: word; }
-.hero__a { grid-area: a; }
-.hero__b { grid-area: b; }
-.hero__title { grid-area: title; }
 .hero__intro { grid-area: intro; }
-.hero__c { grid-area: c; }
-.hero__d { grid-area: d; }
-.hero__index { grid-area: index; }
+.hero__board { grid-area: board; }
+.hero__journey { grid-area: journey; }
 
 .hero__tile {
   position: relative;
   min-width: 0;
   overflow: hidden;
   background: var(--coal);
-}
-
-/* Photo tiles */
-.hero__tile--photo {
-  min-height: 42vw;
-  background: #222;
-}
-.hero__a {
-  min-height: 92vw;
-}
-.hero__img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition:
-    transform var(--t-slow) var(--ease),
-    filter var(--t-slow) var(--ease);
-  filter: contrast(1.04) brightness(0.92);
-}
-.hero__a .hero__img { object-position: 50% 30%; }
-.hero__img--in {
-  animation: shutter 1100ms var(--ease-io) both;
-}
-@keyframes shutter {
-  from {
-    clip-path: inset(0 100% 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-.hero__tile--photo:hover .hero__img {
-  transform: scale(1.035);
-  filter: contrast(1.1) brightness(1);
-}
-
-.hero__frame {
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 8px;
-  background: var(--ink);
-  color: var(--bone);
-}
-.hero__frame .marker {
-  width: 6px;
-  height: 6px;
-  background: var(--smoke);
-  transition: background var(--t-mid) var(--ease);
-}
-.hero__frame.is-live .marker {
-  background: var(--orange);
 }
 
 /* Wordmark tile — the one bright frame on the sheet */
@@ -132,40 +63,6 @@
 .hero__word-foot {
   border-top: 1px solid #bdb7ad;
   padding-top: 10px;
-}
-
-/* Exhibition title tile */
-.hero__title {
-  container-type: inline-size;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
-  padding: clamp(14px, 1.6vw, 24px);
-  border: 1px solid var(--line);
-}
-.hero__title-text {
-  font-size: clamp(30px, 15cqi, 64px);
-  line-height: 0.92;
-  font-weight: 800;
-  font-variation-settings: 'wdth' 75;
-  text-transform: uppercase;
-}
-.hero__title-text .serif {
-  display: block;
-  text-transform: none;
-  color: var(--orange);
-  font-size: 0.82em;
-}
-.hero__title-note {
-  color: var(--ash);
-  font-size: 14px;
-  max-width: 36ch;
-}
-.hero__title .label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
 }
 
 /* Introduction tile */
@@ -224,45 +121,268 @@
   color: var(--ink);
 }
 
-/* Project index tile */
-.hero__index {
+/* ─── Board tile ───────────────────────────────────────────────── */
+.hero__board {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 12px;
-  padding: clamp(14px, 1.6vw, 24px);
+  padding: clamp(12px, 1.4vw, 20px);
 }
-.hero__index ol {
+.board__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.board__bar .label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.board__bar b {
+  color: var(--bone);
+  font-weight: 500;
+}
+.board__reset {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  color: var(--bone);
+  transition: border-color var(--t-fast), color var(--t-fast);
+}
+.board__reset:hover:not(:disabled) {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+.board__reset:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.board__wrap {
+  flex: 1;
   display: grid;
+  place-items: center;
+  min-height: 0;
 }
-.hero__index a {
+.board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: min(100%, 560px);
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  outline-offset: 4px;
+}
+
+.sq {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  font-family: var(--f-mono);
+}
+.sq--light { background: #272624; }
+.sq--dark { background: #151515; }
+.sq--dest {
+  background: var(--paper);
+  color: var(--ink);
+}
+.sq__mark {
+  font-size: clamp(10px, 2.2cqi, 14px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.sq__rank,
+.sq__file {
+  position: absolute;
+  font-size: 9px;
+  color: var(--smoke);
+  pointer-events: none;
+}
+.sq__rank { top: 3px; left: 4px; }
+.sq__file { bottom: 2px; right: 4px; }
+.sq--dest .sq__rank,
+.sq--dest .sq__file { color: #6f6a62; }
+
+/* Legal move: an orange marker; on a destination, an orange ring. */
+.sq.is-valid {
+  cursor: pointer;
+}
+.sq.is-valid::after {
+  content: '';
+  position: absolute;
+  width: 26%;
+  height: 26%;
+  background: var(--orange);
+  transition: transform var(--t-fast) var(--ease);
+}
+.sq--dest.is-valid::after {
+  width: auto;
+  height: auto;
+  inset: 3px;
+  background: none;
+  border: 3px solid var(--orange);
+}
+.sq.is-valid:hover,
+.sq.is-valid:focus-visible {
+  background: #3a3835;
+}
+.sq--dest.is-valid:hover,
+.sq--dest.is-valid:focus-visible {
+  background: var(--bone);
+}
+.sq.is-valid:hover::after {
+  transform: scale(1.25);
+}
+.sq.is-valid:focus-visible {
+  outline: 2px solid var(--bone);
+  outline-offset: -4px;
+  z-index: 2;
+}
+.sq.is-preview {
+  box-shadow: inset 0 0 0 3px var(--orange);
+}
+
+.board__trail {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+.board__trail polyline {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 0.05;
+  stroke-linejoin: round;
+  opacity: 0.85;
+}
+.board__trail polyline.is-preview {
+  stroke: var(--bone);
+  stroke-dasharray: 0.12 0.1;
+  opacity: 0.7;
+}
+
+.board__knight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12.5%;
+  height: 12.5%;
+  padding: 1.2%;
+  pointer-events: none;
+  transition: transform 380ms var(--ease);
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.45));
+  z-index: 3;
+}
+.board__knight svg {
+  width: 100%;
+  height: 100%;
+}
+.board.is-moving .board__knight svg {
+  animation: hop 420ms var(--ease) infinite;
+}
+@keyframes hop {
+  50% { transform: translateY(-14%); }
+}
+
+/* ─── Journey tile ─────────────────────────────────────────────── */
+.hero__journey {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(14px, 1.6vw, 24px);
+  border: 1px solid var(--line);
+}
+.journey__head {
+  display: grid;
+  gap: 10px;
+}
+.journey__head .label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.journey__title {
+  font-size: clamp(30px, 3.2vw, 52px);
+  line-height: 0.92;
+  font-weight: 800;
+  font-variation-settings: 'wdth' 75;
+  text-transform: uppercase;
+}
+.journey__title .serif {
+  display: block;
+  text-transform: none;
+  color: var(--orange);
+  font-size: 0.8em;
+}
+.journey__note {
+  color: var(--ash);
+  font-size: 14px;
+  max-width: 40ch;
+}
+.journey__card {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  padding: 14px;
+  background: var(--ink);
+  border-left: 3px solid var(--line);
+  transition: border-color var(--t-mid) var(--ease);
+}
+.journey__card.is-arrived {
+  border-left-color: var(--orange);
+  animation: card-in var(--t-mid) var(--ease) both;
+}
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(8px); }
+}
+.journey__card-title {
+  font-size: 19px;
+  line-height: 1.1;
+  font-weight: 700;
+  font-variation-settings: 'wdth' 82;
+  text-transform: uppercase;
+}
+.journey__card-text {
+  color: var(--ash);
+  font-size: 14px;
+}
+.journey__list {
+  display: grid;
+  margin-top: auto;
+}
+.journey__dest {
   display: grid;
   grid-template-columns: 30px 1fr auto;
   align-items: center;
   gap: 8px;
-  min-height: 44px;
+  width: 100%;
+  min-height: 42px;
+  text-align: left;
   border-top: 1px solid var(--line);
-  transition: color var(--t-fast) var(--ease);
+  transition: color var(--t-fast);
 }
-.hero__index-title {
+.journey__dest-title {
   font-weight: 600;
   font-variation-settings: 'wdth' 85;
-  font-size: 15px;
+  font-size: 14.5px;
   text-transform: uppercase;
-  letter-spacing: 0.01em;
 }
-.hero__index-arrow {
-  color: var(--smoke);
-  transition:
-    transform var(--t-mid) var(--ease),
-    color var(--t-fast);
-}
-.hero__index a:hover .label,
-.hero__index a:hover .hero__index-arrow {
+.journey__dest:hover .label,
+.journey__dest:focus-visible .label {
   color: var(--orange);
 }
-.hero__index a:hover .hero__index-arrow {
-  transform: translateX(4px);
+.journey__dest.is-here .journey__dest-meta {
+  color: var(--orange);
+}
+.journey__dest[aria-disabled='true'] {
+  cursor: progress;
+  opacity: 0.6;
 }
 
 /* Tablet */
@@ -270,72 +390,41 @@
   .hero {
     grid-template-columns: repeat(6, minmax(0, 1fr));
     grid-template-areas:
-      'word  word  word  word  a     a'
-      'word  word  word  word  a     a'
-      'b     b     b     title title title'
-      'intro intro intro intro c     c'
-      'd     d     index index index index';
+      'word  word  word  word  journey journey'
+      'board board board board journey journey'
+      'intro intro intro intro journey journey';
   }
-  .hero__a,
-  .hero__tile--photo {
-    min-height: 0;
-  }
-  .hero__word { min-height: 52vw; }
-  .hero__b,
-  .hero__d { min-height: 26vw; }
+  .hero__word { min-height: 40vw; }
 }
 
-/* Desktop — fixed-height sheet with living tracks */
+/* Desktop — one fixed-height sheet */
 @media (min-width: 1100px) {
   .hero {
-    height: max(660px, 100svh);
-    grid-template-columns: var(--cols, repeat(12, 1fr));
-    grid-template-rows: var(--rows, repeat(6, 1fr));
+    height: max(680px, 100svh);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(0, 1fr));
     grid-template-areas: none;
-    transition:
-      grid-template-columns var(--t-slow) var(--ease),
-      grid-template-rows var(--t-slow) var(--ease);
   }
-  .hero__word { grid-area: 1 / 1 / 4 / 7; min-height: 0; container-type: size; }
-  .hero__a { grid-area: 1 / 7 / 5 / 10; }
-  .hero__b { grid-area: 1 / 10 / 3 / 13; min-height: 0; }
-  .hero__title { grid-area: 3 / 10 / 5 / 13; }
+  .hero__word { grid-area: 1 / 1 / 4 / 5; min-height: 0; container-type: size; }
   .hero__intro { grid-area: 4 / 1 / 7 / 5; }
-  .hero__c { grid-area: 4 / 5 / 7 / 7; }
-  .hero__d { grid-area: 5 / 7 / 7 / 10; min-height: 0; }
-  .hero__index { grid-area: 5 / 10 / 7 / 13; }
+  .hero__board { grid-area: 1 / 5 / 7 / 10; container-type: size; }
+  .hero__journey { grid-area: 1 / 10 / 7 / 13; }
   .hero__name {
-    font-size: min(27cqi, 33cqb);
+    font-size: min(30cqi, 33cqb);
     margin-block: auto;
   }
-
-  /* Siblings recede slightly while one frame is examined. */
-  .hero.is-hovering .hero__tile--photo .hero__img {
-    filter: contrast(1) brightness(0.7);
-  }
-  .hero.is-hovering .hero__tile--photo:hover .hero__img {
-    filter: contrast(1.1) brightness(1);
+  /* Largest square that fits the tile (minus its bar and padding). */
+  .board {
+    width: min(100cqi - 2px, 100cqb - 80px);
   }
 }
 
 @media (min-width: 1100px) and (max-height: 760px) {
-  .hero__index-title { font-size: 13px; }
-  .hero__index a { min-height: 36px; }
+  .journey__note { display: none; }
   .hero__intro-text { font-size: 18px; }
+  .journey__dest { min-height: 36px; }
 }
 
-/* Two-line frame caption: what the frame shows, and where it comes from. */
-.hero__frame {
-  align-items: flex-start;
-  max-width: calc(100% - 20px);
-}
-.hero__frame .marker {
-  margin-top: 4px;
-}
-.hero__frame small {
-  display: block;
-  margin-top: 2px;
-  font-size: 9.5px;
-  letter-spacing: 0.06em;
-  color: var(--ash);
+@media (prefers-reduced-motion: reduce) {
+  .board__knight { transition: none; }
 }

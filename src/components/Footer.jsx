@@ -22,6 +22,9 @@ export default function Footer() {
               </li>
             ))}
             <li>
+              <Link to="/chess">Chess / Dimension 001</Link>
+            </li>
+            <li>
               <Link to="/colophon" viewTransition>
                 Colophon &amp; credits
               </Link>

@@ -24,12 +24,44 @@ flows. The grid is the interface itself:
   - **Firesense:** a chart of a real 10-minute sensor capture from the project repository.
   - **Legal Summarization:** an extractive → abstractive illustration, clearly labelled as
     an illustration.
+- **Chess / Dimension 001** (`/chess`, opened with the **Play chess** button in the hero): a
+  playable 3D chess board. Details in the section below.
 - **About:** Riti's photograph is shown in grayscale inside a contact-sheet frame, with the
   original colour on hover. It sits beside her introduction, education and interests.
 
+## Chess / Dimension 001
+
+A full chess game in a 3D scene, on its own lazy-loaded route, so the portfolio pages never
+download Three.js or the engine.
+
+- **Rules:** [chess.js](https://github.com/jhlywa/chess.js) handles legal moves, check,
+  checkmate, stalemate, castling, en passant, promotion (with a piece picker), threefold
+  repetition, insufficient material and the fifty-move rule. Illegal moves are rejected.
+- **Computer opponent:** [Stockfish 18](https://stockfishchess.org/), lite single-threaded
+  WebAssembly build by [stockfish.js](https://github.com/nmrugg/stockfish.js). It runs in a
+  Web Worker (`public/engine/`), so the interface never blocks, and it needs no special
+  server headers. Easy, Medium and Hard use Stockfish's own *Skill Level* option (0 / 8 / 20)
+  with depth 2 / depth 8 / 1.2-second searches. Every computer move comes from the engine.
+- **Modes:** against Stockfish (as White or Black, with swap sides) or two players on one
+  device. Also undo (takes back your move and the engine's reply), resign, new game, move
+  history and captured pieces.
+- **3D:** React Three Fiber + drei. The pieces are original lathe-turned Staunton profiles
+  with an extruded knight; there are no downloaded models. The scene has a canvas-texture
+  board with coordinates, a reflective floor, shadows, burnt-orange accents, and fog that
+  follows the camera.
+- **Interaction:** click or tap to select, with legal moves marked. Click a target or drag
+  and drop the piece; dragging a piece never moves the camera. Orbit and zoom on empty space.
+  Camera views: Player, Top-down and Cinematic, plus Reset view. The camera reframes for
+  portrait phones.
+- **Accessibility and fallback:** a **2D** board you can play with arrow keys and Enter, a
+  "Type a move" field (SAN or UCI), announced game status, and an automatic 2D fallback when
+  WebGL is unavailable. Under `prefers-reduced-motion`, pieces and camera move instantly and
+  cinematic mode stays still.
+
 ## Stack
 
-- React 19 + React Router 7 (data router, view transitions)
+- React 19 + React Router 7 (data router, view transitions, lazy `/chess` route)
+- Three.js, React Three Fiber, drei, chess.js, Stockfish 18 (WASM): chess route only
 - Vite 8
 - Hand-written CSS (custom properties, CSS grid, container queries); no UI framework, no
   animation library
@@ -131,6 +163,11 @@ All project text was checked against source material, and nothing was invented.
 
 **Images:** every frame is an original SVG made for this site. The portrait is a
 photograph supplied by Riti Shah. The `/colophon` page lists every frame and its source.
+
+**Chess engine:** Stockfish (GPL-3.0), WebAssembly build by Nathan Rugg (stockfish.js
+v18). The unmodified engine files, their licence (`COPYING.txt`) and links to the source are
+in [`public/engine/`](public/engine/). chess.js is BSD-2-Clause, and Three.js, React Three
+Fiber and drei are MIT.
 
 **Typefaces:** Archivo, Instrument Serif and IBM Plex Mono, served by Google Fonts under the
 SIL Open Font License 1.1.

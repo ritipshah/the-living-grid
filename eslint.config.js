@@ -4,7 +4,8 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default [
-  { ignores: ['dist', 'node_modules'] },
+  // public/engine holds the vendored, minified Stockfish build.
+  { ignores: ['dist', 'node_modules', 'public/engine'] },
   {
     files: ['**/*.{js,jsx,mjs}'],
     languageOptions: {
@@ -19,5 +20,10 @@ export default [
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
+  },
+  {
+    // The entry file only wires the router; it has nothing to hot-reload.
+    files: ['src/main.jsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
   },
 ];

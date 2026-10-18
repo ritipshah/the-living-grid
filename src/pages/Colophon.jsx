@@ -32,6 +32,17 @@ export default function Colophon() {
           <ul>
             <li>React, React Router, Vite</li>
             <li>Custom CSS grid, no UI framework</li>
+            <li>
+              Chess / Dimension 001: Three.js with React Three Fiber and drei, rules by chess.js, and the{' '}
+              <a href="https://stockfishchess.org/" target="_blank" rel="noopener noreferrer">
+                Stockfish
+              </a>{' '}
+              engine (GPL-3.0, WebAssembly build by{' '}
+              <a href="https://github.com/nmrugg/stockfish.js" target="_blank" rel="noopener noreferrer">
+                stockfish.js
+              </a>
+              ). It runs in your browser.
+            </li>
             <li>Project visuals are original SVG; the Firesense chart plots a real captured session from that project&rsquo;s repository</li>
           </ul>
         </section>

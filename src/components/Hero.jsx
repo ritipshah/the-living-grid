@@ -229,6 +229,21 @@ export default function Hero() {
             About
           </SectionLink>
         </div>
+        <Link to="/chess" className="play-chess">
+          <span className="play-chess__grid" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+            <i />
+          </span>
+          <span className="play-chess__text">
+            <span className="play-chess__title">Play chess</span>
+            <span className="play-chess__sub">Dimension 001 · 3D · vs Stockfish</span>
+          </span>
+          <span className="play-chess__arrow" aria-hidden="true">
+            →
+          </span>
+        </Link>
       </div>
 
       <div className="hero__tile hero__board">

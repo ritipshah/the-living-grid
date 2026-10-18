@@ -1,0 +1,538 @@
+/* ─── Case study ────────────────────────────────────────────────── */
+.cs {
+  padding-top: calc(var(--nav-h) + var(--gutter));
+}
+
+.cs__head {
+  display: grid;
+  gap: var(--gutter);
+}
+.cs__head > * {
+  background: var(--coal);
+  padding: clamp(18px, 2.4vw, 36px);
+}
+.cs__crumbs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.cs__crumbs a {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  color: var(--bone);
+}
+.cs__crumbs a:hover {
+  color: var(--orange);
+}
+
+.cs__title-block {
+  position: relative;
+  display: grid;
+  gap: 22px;
+  align-content: end;
+  min-height: 46vh;
+  overflow: hidden;
+}
+.cs__index {
+  position: absolute;
+  top: -0.12em;
+  right: 0.02em;
+  font-size: clamp(140px, 22vw, 360px);
+  font-weight: 900;
+  font-variation-settings: 'wdth' 62;
+  line-height: 1;
+  color: #1c1c1b;
+  pointer-events: none;
+}
+.cs__title {
+  position: relative;
+  font-size: clamp(42px, 6.6vw, 112px);
+  max-width: 14ch;
+  text-wrap: balance;
+}
+.cs__lede {
+  position: relative;
+  font-size: clamp(18px, 1.5vw, 23px);
+  line-height: 1.4;
+  max-width: 52ch;
+  color: #d7d2ca;
+}
+
+.cs__meta {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+.cs__meta dl {
+  display: grid;
+}
+.cs__meta dl > div {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.cs__meta dd {
+  font-size: 15.5px;
+}
+.cs__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.cs__stack li {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  padding: 3px 7px;
+  border: 1px solid var(--line);
+}
+.cs__team {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--bone);
+  border-left: 2px solid var(--orange);
+  padding-left: 12px;
+}
+.cs__links {
+  display: grid;
+  gap: 8px;
+}
+.cs__links .btn {
+  width: 100%;
+  justify-content: space-between;
+}
+.cs__nolink {
+  border: 1px dashed var(--line);
+  padding: 12px;
+}
+
+.cs__hero {
+  position: relative;
+  margin-top: var(--gutter);
+  height: clamp(280px, 52vw, 640px);
+  overflow: hidden;
+  background: var(--coal);
+}
+.cs__hero > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cs__body {
+  display: grid;
+  gap: var(--gutter);
+  margin-top: var(--gutter);
+}
+.cs__section {
+  display: grid;
+  gap: 18px;
+  background: var(--coal);
+  padding: clamp(22px, 3vw, 48px) clamp(18px, 2.4vw, 36px);
+}
+.cs__label {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+.cs__content {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+.cs__h2 {
+  font-size: clamp(28px, 3.2vw, 50px);
+  line-height: 1;
+  font-weight: 750;
+  font-variation-settings: 'wdth' 76;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.cs__prose {
+  display: grid;
+  gap: 1em;
+  font-size: clamp(16.5px, 1.25vw, 19px);
+  color: #d7d2ca;
+  max-width: 64ch;
+}
+.cs__lead-in {
+  color: var(--ash);
+}
+.cs__caption {
+  font-size: 14px;
+  color: var(--ash);
+  max-width: 70ch;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+}
+
+.cs__items {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+}
+.cs__items li {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 18px;
+  background: var(--ink);
+  border: 1px solid var(--line);
+}
+.cs__items h4 {
+  font-size: 18px;
+  font-weight: 700;
+  font-variation-settings: 'wdth' 85;
+  line-height: 1.15;
+}
+.cs__items p {
+  color: var(--ash);
+  font-size: 15px;
+}
+.cs__items--decisions li {
+  border-left: 3px solid var(--orange);
+}
+
+.cs__groups {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+}
+.cs__group {
+  background: var(--ink);
+  border: 1px solid var(--line);
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+.cs__group li {
+  font-family: var(--f-mono);
+  font-size: 13.5px;
+  padding: 6px 0;
+  border-top: 1px solid #222;
+}
+
+.cs__confirmed {
+  display: grid;
+  gap: 16px;
+  padding: clamp(18px, 2vw, 28px);
+  background: var(--bone);
+  color: var(--ink);
+}
+.cs__confirmed .label--accent {
+  color: var(--orange-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.cs__confirmed ul {
+  display: grid;
+  gap: 10px;
+}
+.cs__confirmed li {
+  font-size: clamp(18px, 1.6vw, 24px);
+  line-height: 1.3;
+  padding-top: 10px;
+  border-top: 1px solid #c9c3b9;
+  max-width: 60ch;
+}
+.cs__confirmed .cs__caption {
+  color: #4a4741;
+  border-color: #c9c3b9;
+}
+
+.cs__background {
+  display: grid;
+  gap: 16px;
+  padding: clamp(16px, 2vw, 24px);
+  border: 1px dashed var(--smoke);
+}
+.cs__flag {
+  justify-self: start;
+  padding: 4px 8px;
+  border: 1px solid var(--smoke);
+}
+
+.cs__notes {
+  display: grid;
+  gap: 10px;
+  max-width: 72ch;
+}
+.cs__notes li {
+  position: relative;
+  padding-left: 22px;
+  color: #d7d2ca;
+}
+.cs__notes li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--orange);
+}
+
+/* Pipeline diagram */
+.pipe {
+  display: grid;
+  gap: 14px;
+}
+.pipe__stages {
+  display: grid;
+  gap: var(--gutter);
+  counter-reset: s;
+}
+.pipe__stage {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 16px;
+  background: var(--ink);
+  border: 1px solid var(--line);
+}
+.pipe__stage.is-accent {
+  border-color: var(--orange);
+}
+.pipe__stage.is-accent .label {
+  color: var(--orange);
+}
+.pipe__name {
+  font-family: var(--f-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bone);
+  overflow-wrap: anywhere;
+}
+.pipe__detail {
+  font-size: 13.5px;
+  color: var(--ash);
+}
+/* connectors */
+.pipe__stage:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 24px;
+  bottom: calc(-1 * var(--gutter) - 1px);
+  width: 1px;
+  height: var(--gutter);
+  background: var(--orange);
+}
+@media (min-width: 900px) {
+  .pipe__stages {
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  }
+  .pipe__stage {
+    min-height: 140px;
+  }
+  .pipe__stage:not(:last-child)::after {
+    left: auto;
+    right: calc(-1 * var(--gutter) - 1px);
+    top: 50%;
+    bottom: auto;
+    width: var(--gutter);
+    height: 1px;
+  }
+}
+
+.cs__interactive {
+  background: var(--ink);
+  border: 1px solid var(--line);
+  padding: clamp(14px, 2vw, 28px);
+  min-width: 0;
+}
+
+/* Prev / next */
+.cs__next {
+  display: grid;
+  gap: var(--gutter);
+  margin-top: var(--gutter);
+}
+.cs__next-link {
+  display: grid;
+  gap: 12px;
+  align-content: space-between;
+  min-height: 170px;
+  padding: clamp(18px, 2vw, 28px);
+  background: var(--coal);
+  transition: background var(--t-mid) var(--ease), color var(--t-mid) var(--ease);
+}
+.cs__next-title {
+  font-size: clamp(22px, 2.4vw, 38px);
+  font-weight: 750;
+  font-variation-settings: 'wdth' 76;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.cs__next-link:hover {
+  background: var(--bone);
+  color: var(--ink);
+}
+.cs__next-link:hover .label {
+  color: var(--orange-ink);
+}
+.cs__next-link--next {
+  text-align: right;
+}
+
+@media (min-width: 900px) {
+  .cs__head {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .cs__crumbs { grid-column: 1 / 13; padding-block: 14px !important; }
+  .cs__title-block { grid-column: 1 / 9; }
+  .cs__meta { grid-column: 9 / 13; }
+  .cs__section {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--gutter);
+  }
+  .cs__label {
+    grid-column: 1 / 3;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cs__content { grid-column: 3 / 13; }
+  .cs__next { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── 404 ───────────────────────────────────────────────────────── */
+.nf {
+  display: grid;
+  gap: var(--gutter);
+  padding-top: calc(var(--nav-h) + var(--gutter));
+  min-height: 80vh;
+}
+.nf__tile {
+  background: var(--coal);
+  position: relative;
+  overflow: hidden;
+}
+.nf__tile--missing {
+  display: grid;
+  gap: 22px;
+  align-content: end;
+  padding: clamp(20px, 3vw, 44px);
+  border: 1px dashed var(--smoke);
+  background:
+    repeating-linear-gradient(135deg, transparent 0 18px, #141414 18px 19px),
+    var(--ink);
+  min-height: 60vh;
+}
+.nf__title {
+  font-size: clamp(56px, 9vw, 150px);
+}
+.nf__text {
+  color: var(--ash);
+  max-width: 44ch;
+}
+.nf__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nf__tile--photo {
+  min-height: 260px;
+}
+.nf__tile--photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (min-width: 900px) {
+  .nf { grid-template-columns: 2fr 1fr; }
+}
+
+/* ─── Colophon ──────────────────────────────────────────────────── */
+.colo {
+  padding-top: calc(var(--nav-h) + var(--gutter));
+}
+.colo__head,
+.colo__block {
+  background: var(--coal);
+  padding: clamp(20px, 2.4vw, 36px);
+}
+.colo__head {
+  display: grid;
+  gap: 20px;
+}
+.colo__title {
+  font-size: clamp(56px, 9vw, 140px);
+}
+.colo__lede {
+  max-width: 56ch;
+  font-size: 18px;
+  color: #d7d2ca;
+}
+.colo__grid {
+  display: grid;
+  gap: var(--gutter);
+  margin-top: var(--gutter);
+}
+.colo__block {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+.colo__block li {
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+.colo__small {
+  font-size: 14px;
+  color: var(--ash);
+  max-width: 70ch;
+}
+.colo__table-wrap {
+  overflow-x: auto;
+}
+.colo__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.colo__table th {
+  text-align: left;
+  font-family: var(--f-mono);
+  font-weight: 500;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ash);
+  padding: 8px 10px 8px 0;
+}
+.colo__table td {
+  padding: 8px 10px 8px 0;
+  border-top: 1px solid var(--line);
+  vertical-align: middle;
+}
+.colo__table img {
+  width: 64px;
+  height: 44px;
+  object-fit: cover;
+}
+.colo__table a {
+  text-decoration: underline;
+  text-decoration-color: var(--smoke);
+  text-underline-offset: 3px;
+}
+.colo__table a:hover {
+  color: var(--orange);
+}
+@media (min-width: 900px) {
+  .colo__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .colo__block--wide {
+    grid-column: 1 / -1;
+  }
+}

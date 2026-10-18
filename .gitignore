@@ -1,0 +1,14 @@
+# dependencies and build output
+node_modules
+dist
+.vite
+
+# local tooling
+.claude
+.vercel
+.DS_Store
+*.log
+
+# never commit secrets
+.env
+.env.*

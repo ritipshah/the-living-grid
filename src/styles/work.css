@@ -1,0 +1,345 @@
+/* ─── Selected work · filterable contact sheet ──────────────────── */
+.work__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 14px var(--pad) calc(14px + var(--gutter));
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 12px 0 14px;
+  border: 1px solid var(--line);
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ash);
+  transition:
+    color var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease),
+    background var(--t-fast) var(--ease);
+}
+.chip:hover {
+  color: var(--bone);
+  border-color: var(--smoke);
+}
+.chip[aria-pressed='true'] {
+  background: var(--bone);
+  border-color: var(--bone);
+  color: var(--ink);
+}
+.chip__count {
+  font-size: 11px;
+  opacity: 0.7;
+}
+.chip[aria-pressed='true'] .chip__count {
+  color: var(--orange-ink);
+  opacity: 1;
+}
+
+.work__grid {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: minmax(0, 1fr);
+}
+.work__item {
+  min-width: 0;
+  position: relative;
+}
+.work__item--photo {
+  height: 132px;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+.work__item--photo:nth-child(n + 2 of .work__item--photo) {
+  display: none;
+}
+.work__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.82) contrast(1.05);
+}
+
+/* ─── Project tile ──────────────────────────────────────────────── */
+.tile {
+  height: 100%;
+  container-type: inline-size;
+}
+.tile__link {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(220px, 1fr) auto;
+  height: 100%;
+  min-height: 520px;
+  background: var(--coal);
+  outline-offset: -2px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.tile__link::after {
+  /* frame line that turns orange */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  pointer-events: none;
+  transition: border-color var(--t-mid) var(--ease);
+  z-index: 3;
+}
+
+.tile__visual {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+.tile__visual > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition:
+    transform var(--t-slow) var(--ease),
+    filter var(--t-slow) var(--ease);
+}
+
+.tile__top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 14px 16px;
+  z-index: 2;
+  pointer-events: none;
+}
+.tile__no {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-variation-settings: 'wdth' 70;
+  font-size: 44px;
+  line-height: 0.8;
+  color: var(--bone);
+  mix-blend-mode: difference;
+}
+.tile__top .label {
+  background: var(--ink);
+  padding: 4px 7px;
+}
+
+.tile__info {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding: 18px 18px 16px;
+  background: var(--coal);
+  border-top: 1px solid var(--line);
+}
+.tile__title {
+  font-size: clamp(22px, 7cqi, 34px);
+  line-height: 0.98;
+  font-weight: 750;
+  font-variation-settings: 'wdth' 78;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.tile__short {
+  color: var(--ash);
+  font-size: 15px;
+  line-height: 1.45;
+  max-width: 54ch;
+}
+.tile__more {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--t-mid) var(--ease);
+}
+.tile__more > div {
+  overflow: hidden;
+  display: grid;
+  gap: 8px;
+}
+.tile__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tile__tags li {
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  padding: 3px 7px;
+  border: 1px solid var(--line);
+  color: var(--bone);
+}
+.tile__status {
+  color: var(--ash);
+}
+.tile__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--bone);
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  transition: color var(--t-fast);
+}
+.tile__cta span {
+  transition: transform var(--t-mid) var(--ease);
+}
+
+.tile__corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  background: var(--orange);
+  transform: scale(0);
+  transform-origin: top right;
+  transition: transform var(--t-mid) var(--ease);
+  z-index: 3;
+}
+
+/* Interaction — hover on fine pointers, focus for keyboards. */
+.tile__link:focus-visible::after {
+  border-color: var(--orange);
+}
+.tile__link:focus-visible .tile__corner {
+  transform: scale(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tile__more {
+    grid-template-rows: 0fr;
+  }
+  .tile__link:hover .tile__more,
+  .tile__link:focus-visible .tile__more {
+    grid-template-rows: 1fr;
+  }
+  .tile__link:hover::after {
+    border-color: var(--orange);
+  }
+  .tile__link:hover .tile__corner {
+    transform: scale(1);
+  }
+  .tile__link:hover .tile__visual > svg {
+    transform: scale(1.04);
+  }
+  .tile__link:hover .tile__cta {
+    color: var(--orange);
+  }
+  .tile__link:hover .tile__cta span {
+    transform: translateX(6px);
+  }
+}
+
+/* Tablet: two-up sheet */
+@media (min-width: 720px) {
+  .work__grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .work__item {
+    grid-column: span 3;
+  }
+  .work__grid--n1 .work__item {
+    grid-column: span 6;
+  }
+  .work__item--photo {
+    grid-column: span 6;
+    height: 160px;
+  }
+  .work__item--photo:nth-child(n + 2 of .work__item--photo) {
+    display: none;
+  }
+  .tile__link {
+    min-height: 560px;
+  }
+}
+
+/* Desktop: explicit, asymmetric placements */
+@media (min-width: 1100px) {
+  .work__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-rows: 270px;
+  }
+  .work__item,
+  .work__grid--n1 .work__item {
+    grid-column: var(--gc);
+    grid-row: var(--gr);
+  }
+  .work__item--photo,
+  .work__item--photo:nth-child(n + 2 of .work__item--photo) {
+    display: block;
+    height: auto;
+    grid-column: var(--gc);
+  }
+  .tile__link {
+    min-height: 0;
+  }
+
+  /* Wide, short frames put the visual beside the text. */
+  .tile--wide .tile__link {
+    grid-template-rows: 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  }
+  .tile--wide .tile__info {
+    border-top: 0;
+    border-left: 1px solid var(--line);
+    align-content: end;
+  }
+  .tile--wide .tile__top {
+    right: auto;
+    width: 47.6%;
+  }
+  .tile--wide .tile__short {
+    font-size: 14px;
+  }
+  .tile--wide .tile__title {
+    font-size: clamp(20px, 4.4cqi, 30px);
+  }
+
+  .tile--feature .tile__link {
+    grid-template-rows: 1fr;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+  .tile--feature .tile__info {
+    border-top: 0;
+    border-left: 1px solid var(--line);
+    align-content: end;
+    padding: 28px;
+  }
+  .tile--feature .tile__title {
+    font-size: clamp(30px, 4cqi, 54px);
+  }
+  .tile--feature .tile__top {
+    right: auto;
+    width: 61%;
+  }
+}
+
+/* Each project keeps its own ground colour behind a letterboxed visual. */
+[data-project='cyber-threat-intelligence'] .tile__visual,
+[data-project='cyber-threat-intelligence'] .cs__hero,
+[data-project='firesense'] .tile__visual,
+[data-project='firesense'] .cs__hero {
+  background: #0e0e0e;
+}
+[data-project='nexus-criminal-intelligence'] .tile__visual,
+[data-project='nexus-criminal-intelligence'] .cs__hero {
+  background: var(--paper);
+}
+[data-project='legal-document-summarization'] .tile__visual,
+[data-project='legal-document-summarization'] .cs__hero {
+  background: #171717;
+}
+[data-project='nexus-criminal-intelligence'] .tile__no {
+  color: var(--ink);
+  mix-blend-mode: normal;
+}

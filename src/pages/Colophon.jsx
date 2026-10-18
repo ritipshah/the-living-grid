@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { IMAGE_CREDITS } from '../data/credits.js';
+import { FRAMES, TechFrame } from '../visuals/Frames.jsx';
 import { useDocumentMeta } from '../hooks/useDocumentMeta.js';
 
 export default function Colophon() {
@@ -12,8 +12,8 @@ export default function Colophon() {
         </nav>
         <h1 className="display colo__title">Colophon</h1>
         <p className="colo__lede">
-          The Living Grid is a hand-built React and Vite site. Its layout borrows from architectural contact sheets:
-          thick black gutters, frames of unequal size, and one orange mark at a time.
+          The Living Grid is a hand-built React and Vite site. Its layout borrows from photographic contact sheets:
+          thick black gutters, frames of unequal size and one orange mark at a time. Every frame shows the work itself.
         </p>
       </header>
 
@@ -36,41 +36,27 @@ export default function Colophon() {
           </ul>
         </section>
         <section className="colo__block colo__block--wide" aria-labelledby="colo-img">
-          <h2 id="colo-img" className="label label--accent">Photographs</h2>
+          <h2 id="colo-img" className="label label--accent">Frames &amp; images</h2>
           <p className="colo__small">
-            All architectural photographs are CC0 1.0 (public-domain dedication) images originally published on Unsplash
-            and archived on Wikimedia Commons. They were resized and converted to grayscale for this site. No portrait
-            photographs are used.
+            All frames are original SVG drawn in the browser. The source of each one is stated in its caption: captured
+            sensor data from the Firesense repository, the scoring rule from the Cyber Threat Intelligence repository, an
+            illustrative synthetic-ID graph for Nexus, and illustrations for the legal-summarization project. None of them
+            is a screenshot. The portrait in the About section is a photograph supplied by Riti, cropped but not
+            retouched.
           </p>
-          <div className="colo__table-wrap">
-            <table className="colo__table">
-              <thead>
-                <tr>
-                  <th scope="col">Frame</th>
-                  <th scope="col">Original title</th>
-                  <th scope="col">Photographer</th>
-                  <th scope="col">License</th>
-                </tr>
-              </thead>
-              <tbody>
-                {IMAGE_CREDITS.map((c) => (
-                  <tr key={c.file}>
-                    <td>
-                      <img src={`/images/arch/${c.file}-640.webp`} alt="" width="64" height="44" loading="lazy" />
-                    </td>
-                    <td>
-                      <a href={c.source} target="_blank" rel="noopener noreferrer">
-                        {c.title}
-                        <span className="sr-only"> on Wikimedia Commons (opens in a new tab)</span>
-                      </a>
-                    </td>
-                    <td>{c.author}</td>
-                    <td>{c.license}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ul className="colo__frames">
+            {Object.entries(FRAMES).map(([key, f]) => (
+              <li key={key}>
+                <div className="colo__thumb" aria-hidden="true">
+                  <TechFrame name={key} w={200} h={140} />
+                </div>
+                <p className="label">
+                  Fr. {f.no} · {f.title}
+                </p>
+                <p className="colo__small">{f.source}</p>
+              </li>
+            ))}
+          </ul>
         </section>
       </div>
     </article>

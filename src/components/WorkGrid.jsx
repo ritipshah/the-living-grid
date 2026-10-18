@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FILTERS, PROJECTS } from '../data/projects.js';
-import { PHOTOS } from '../data/site.js';
+import { FRAMES, TechFrame } from '../visuals/Frames.jsx';
 import { VISUALS } from '../visuals/index.js';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion.js';
 
@@ -9,9 +9,9 @@ import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion.js';
 const LAYOUT_ALL = {
   'cyber-threat-intelligence': ['1 / 8', '1 / 3', 'tall'],
   'nexus-criminal-intelligence': ['8 / 13', '1 / 2', 'wide'],
-  'photo-balcony': ['8 / 10', '2 / 3'],
-  'photo-corridor': ['10 / 13', '2 / 3'],
-  'photo-atrium': ['1 / 4', '3 / 5'],
+  'frame-matrix': ['8 / 10', '2 / 3'],
+  'frame-climate': ['10 / 13', '2 / 3'],
+  'frame-samples': ['1 / 4', '3 / 5'],
   firesense: ['4 / 9', '3 / 5', 'tall'],
   'legal-document-summarization': ['9 / 13', '3 / 5', 'tall'],
 };
@@ -27,10 +27,11 @@ const LAYOUT_N = {
     ['8 / 13', '2 / 3', 'wide'],
   ],
 };
+// Technical frames placed between the projects on the full sheet.
 const PHOTO_TILES = [
-  { key: 'photo-balcony', photo: PHOTOS.balcony, at: 1 },
-  { key: 'photo-corridor', photo: PHOTOS.corridor, at: 1 },
-  { key: 'photo-atrium', photo: PHOTOS.atrium, at: 2 },
+  { key: 'frame-matrix', frame: 'matrix', size: [220, 270], at: 1 },
+  { key: 'frame-climate', frame: 'climate', size: [340, 270], at: 1 },
+  { key: 'frame-samples', frame: 'samples', size: [330, 560], at: 2 },
 ];
 
 export function ProjectTile({ project, shape = 'tall' }) {
@@ -134,7 +135,7 @@ export default function WorkGrid() {
   if (filter === 'all') {
     PROJECTS.forEach((p, i) => {
       items.push({ key: p.slug, project: p, place: LAYOUT_ALL[p.slug] });
-      PHOTO_TILES.filter((ph) => ph.at === i).forEach((ph) => items.push({ key: ph.key, photo: ph.photo, place: LAYOUT_ALL[ph.key] }));
+      PHOTO_TILES.filter((ph) => ph.at === i).forEach((ph) => items.push({ key: ph.key, photo: ph, place: LAYOUT_ALL[ph.key] }));
     });
   } else {
     visible.forEach((p, i) => items.push({ key: p.slug, project: p, place: LAYOUT_N[visible.length][i] }));
@@ -184,17 +185,12 @@ export default function WorkGrid() {
             {it.project ? (
               <ProjectTile project={it.project} shape={it.place[2]} />
             ) : (
-              <img
-                className="work__photo"
-                src={it.photo.src}
-                srcSet={it.photo.srcSet}
-                sizes="(min-width: 1100px) 25vw, 100vw"
-                alt=""
-                width={it.photo.w}
-                height={it.photo.h}
-                loading="lazy"
-                decoding="async"
-              />
+              <div className="work__photo" aria-hidden="true">
+                <TechFrame name={it.photo.frame} w={it.photo.size[0]} h={it.photo.size[1]} />
+                <span className="work__photo-tag label">
+                  Fr. {FRAMES[it.photo.frame].no} · {FRAMES[it.photo.frame].source}
+                </span>
+              </div>
             )}
           </div>
         ))}

@@ -1,8 +1,7 @@
 import SectionHead from './SectionHead.jsx';
-import { EDUCATION, PHOTOS } from '../data/site.js';
+import { EDUCATION, INTERESTS, PORTRAIT } from '../data/site.js';
 
 export default function About() {
-  const p = PHOTOS.loggia;
   return (
     <section id="about" className="section about shell" aria-labelledby="about-title">
       <SectionHead no="02" kicker="About" title="Background" id="about-title">
@@ -32,18 +31,33 @@ export default function About() {
           <p>I&rsquo;m open to internships and research opportunities in machine learning, NLP and applied analytics.</p>
         </div>
 
-        <figure className="about__photo reveal" aria-hidden="true">
-          <img
-            src={p.src}
-            srcSet={p.srcSet}
-            sizes="(min-width: 1100px) 25vw, 100vw"
-            alt=""
-            width={p.w}
-            height={p.h}
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
+        <div className="about__portrait reveal">
+          <figure className="portrait">
+            <div className="portrait__frame">
+              <img
+                src={PORTRAIT.src}
+                alt={PORTRAIT.alt}
+                width={PORTRAIT.w}
+                height={PORTRAIT.h}
+                loading="lazy"
+                decoding="async"
+              />
+              <span className="portrait__corner" aria-hidden="true" />
+            </div>
+            <figcaption className="portrait__caption label">
+              <span>Fr. 00</span>
+              <span>Riti Shah · Data Science, NMIMS</span>
+            </figcaption>
+          </figure>
+          <div className="interests">
+            <p className="label label--accent">Interests</p>
+            <ul>
+              {INTERESTS.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
         <div className="edu reveal">
           <p className="label label--accent">Education</p>

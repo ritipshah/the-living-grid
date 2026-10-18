@@ -12,3 +12,6 @@ dist
 # never commit secrets
 .env
 .env.*
+
+# original, full-resolution source images (processed copies live in public/)
+assets-src

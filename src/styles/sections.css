@@ -38,19 +38,59 @@
 .about__text p {
   max-width: 62ch;
 }
-.about__photo {
-  padding: 0 !important;
-  min-height: 260px;
-  overflow: hidden;
-  position: relative;
+.about__portrait {
+  display: grid;
+  gap: 24px;
+  align-content: start;
 }
-.about__photo img {
-  position: absolute;
-  inset: 0;
+.portrait {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+.portrait__frame {
+  position: relative;
+  width: min(100%, 300px);
+  aspect-ratio: 301 / 376;
+  padding: 8px;
+  background: var(--ink);
+  border: 1px solid var(--line);
+}
+.portrait__frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 40%;
+  filter: grayscale(1) contrast(1.06) brightness(0.98);
+  transition: filter var(--t-slow) var(--ease);
+}
+/* Original colour returns on hover — the grayscale is only a treatment. */
+.portrait:hover .portrait__frame img {
+  filter: none;
+}
+.portrait__corner {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 22px;
+  height: 22px;
+  background: var(--orange);
+}
+.portrait__caption {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.portrait__caption span:first-child {
+  color: var(--orange);
+}
+.interests ul {
+  display: grid;
+  margin-top: 10px;
+}
+.interests li {
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+  font-size: 16px;
 }
 
 .edu {
@@ -103,14 +143,14 @@
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
   .about__statement { grid-column: 1 / 8; min-height: 380px; }
-  .about__photo { grid-column: 8 / 13; grid-row: 1 / 3; }
+  .about__portrait { grid-column: 8 / 13; grid-row: 1 / 3; }
   .about__text { grid-column: 1 / 5; }
   .edu { grid-column: 5 / 8; }
 }
 @media (min-width: 900px) and (max-width: 1199px) {
   .about__text { grid-column: 1 / 8; }
   .edu { grid-column: 1 / 13; }
-  .about__photo { grid-row: 1 / 3; }
+  .about__portrait { grid-row: 1 / 3; }
 }
 
 /* ─── Toolkit ───────────────────────────────────────────────────── */

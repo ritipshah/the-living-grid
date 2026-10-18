@@ -3,14 +3,17 @@
 Personal portfolio of **Riti Shah**, B.Tech (Integrated) Data Science student at SVKM's NMIMS
 Mukesh Patel School of Technology Management & Engineering, Mumbai.
 
-The site is built around one idea, **The Living Grid**: an architectural contact sheet of
-black-and-white frames separated by thick black gutters. The grid is the interface itself:
+The site is built around one idea, **The Living Grid**: a contact sheet of monochrome
+technical frames separated by thick black gutters. Every frame is original SVG drawn from
+the projects themselves: captured sensor data, scoring rules, graph structures and document
+flows. The grid is the interface itself:
 
 - **Hero:** a 12 × 6 sheet. On desktop, the hovered frame's columns and rows widen and the
-  other frames recede. Photo frames change on a slow cycle with a shutter wipe, and an
-  orange marker shows the newest one. The cycle pauses on hover, off-screen, in a hidden
+  other frames recede. Technical frames change on a slow cycle with a shutter wipe, and an
+  orange marker shows the newest one. Each caption states the frame's source, for example
+  "Firesense · captured data" or "Nexus · synthetic IDs". The cycle pauses on hover, off-screen, in a hidden
   tab, or when `prefers-reduced-motion` is set.
-- **Selected work:** four project frames in an asymmetric layout with architectural frames
+- **Selected work:** four project frames in an asymmetric layout with technical frames
   between them. Category filters rearrange the sheet with FLIP transitions, and each frame
   opens an internal case study through a view transition.
 - **Case studies** (`/work/:slug`): each has its own visual and an interactive piece based
@@ -20,6 +23,8 @@ black-and-white frames separated by thick black gutters. The grid is the interfa
   - **Firesense:** a chart of a real 10-minute sensor capture from the project repository.
   - **Legal Summarization:** an extractive → abstractive illustration, clearly labelled as
     an illustration.
+- **About:** Riti's photograph is shown in grayscale inside a contact-sheet frame, with the
+  original colour on hover. It sits beside her introduction, education and interests.
 
 ## Stack
 
@@ -78,24 +83,23 @@ dependency:
 
 ```bash
 npm i --no-save sharp
-npm run images -- <folder-with-source-jpgs>   # grayscale + resize → public/images/arch
-npm run og                                    # rebuild public/og-image.jpg
+npm run images   # crop assets-src/riti-shah-portrait.png → public/images/portrait/riti-shah.webp
+npm run og       # rebuild public/og-image.jpg from the technical frames
 ```
 
 ## Structure
 
 ```
 public/
-  images/arch/        processed CC0 photographs (640w + 1280w WebP)
-  images/CREDITS.md   photographer, title, licence and source for every image
-  og-image.jpg        social preview
+  images/portrait/    Riti's portrait (cropped, not retouched)
+  og-image.jpg        social preview, generated from the frames
   favicon.svg
-scripts/              image + OG generation (sharp)
+scripts/              portrait + OG generation (sharp, run on demand)
 src/
-  data/               all copy: profile, projects, credits, Firesense session data
+  data/               all copy, plus Firesense session data and the illustrative Nexus graph
   components/         Nav, Hero, WorkGrid, About, Toolkit, Record, Contact, Footer
   pages/              Home, CaseStudy, Colophon, NotFound
-  visuals/            per-project SVG tiles and case-study interactives
+  visuals/            per-project SVG tiles, case-study interactives, Frames.jsx (grid frames)
   hooks/              reduced motion, media queries, active section, document meta
   styles/             tokens/base, chrome, hero, work, sections, case, visuals
 ```
@@ -117,20 +121,20 @@ All project text was checked against source material, and nothing was invented.
 - Where a README described features that are not in the committed code (Nexus: triggers,
   scheduled events, some procedures), the case study leaves them out and says so.
 - No accuracy figures, user counts or benchmark results appear anywhere.
-- No phone number, home address or portrait photograph is published.
+- No phone number or home address is published.
+- The only photograph on the site is Riti's own portrait, which she supplied.
+- No frame is presented as an application screenshot. Synthetic and illustrative frames
+  are labelled as such.
 
 ## Credits
 
-**Photographs:** 11 CC0 1.0 images by Samuel Zeller, Mihail Ribkin, Osman Rana,
-chuttersnap, Verne Ho, Kyaw Tun, Joel Filipe, Echo Grid and Dmitri Popov. They were first
-published on Unsplash and are archived on Wikimedia Commons. CC0 does not require
-attribution, but full per-image details are in
-[`public/images/CREDITS.md`](public/images/CREDITS.md) and on the site's `/colophon` page.
+**Images:** every frame is an original SVG made for this site. The portrait is a
+photograph supplied by Riti Shah. The `/colophon` page lists every frame and its source.
 
 **Typefaces:** Archivo, Instrument Serif and IBM Plex Mono, served by Google Fonts under the
 SIL Open Font License 1.1.
 
-**Data:** the Firesense chart plots `data/real_session_20260905.csv` from the Firesense
+**Data:** the Firesense chart and frames plot `data/real_session_20260905.csv` from the Firesense
 team repository.
 
 **Tools:** written with help from an AI coding assistant (Claude), under Riti's art direction

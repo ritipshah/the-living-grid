@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import SectionHead from './SectionHead.jsx';
-import { PHOTOS, PROFILE } from '../data/site.js';
+import { PROFILE } from '../data/site.js';
+import { FRAMES, TechFrame } from '../visuals/Frames.jsx';
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
-  const p = PHOTOS.monolith;
 
   const copy = async () => {
     try {
@@ -61,7 +61,10 @@ export default function Contact() {
         </a>
 
         <figure className="contact__photo" aria-hidden="true">
-          <img src={p.src} srcSet={p.srcSet} sizes="(min-width: 1100px) 33vw, 100vw" alt="" width={p.w} height={p.h} loading="lazy" decoding="async" />
+          <TechFrame name="barcode" w={460} h={230} />
+          <span className="work__photo-tag label">
+            Fr. {FRAMES.barcode.no} · {FRAMES.barcode.source}
+          </span>
         </figure>
       </div>
     </section>

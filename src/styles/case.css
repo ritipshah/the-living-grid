@@ -536,3 +536,26 @@
     grid-column: 1 / -1;
   }
 }
+
+.colo__frames {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  gap: var(--gutter);
+}
+.colo__frames li {
+  display: grid;
+  gap: 6px;
+  border-top: 0;
+  padding: 0;
+}
+.colo__thumb {
+  position: relative;
+  aspect-ratio: 10 / 7;
+  border: 1px solid var(--line);
+}
+.colo__thumb svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}

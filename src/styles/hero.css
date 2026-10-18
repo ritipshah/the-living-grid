@@ -323,3 +323,19 @@
   .hero__index a { min-height: 36px; }
   .hero__intro-text { font-size: 18px; }
 }
+
+/* Two-line frame caption: what the frame shows, and where it comes from. */
+.hero__frame {
+  align-items: flex-start;
+  max-width: calc(100% - 20px);
+}
+.hero__frame .marker {
+  margin-top: 4px;
+}
+.hero__frame small {
+  display: block;
+  margin-top: 2px;
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: var(--ash);
+}

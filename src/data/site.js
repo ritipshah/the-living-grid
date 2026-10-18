@@ -106,26 +106,19 @@ export const CERTIFICATIONS = [
   },
 ];
 
-// Architectural photographs (CC0, see public/images/CREDITS.md).
-const img = (name, w, h, alt = '') => ({
-  name,
-  src: `/images/arch/${name}-1280.webp`,
-  srcSet: `/images/arch/${name}-640.webp 640w, /images/arch/${name}-1280.webp 1280w`,
-  w,
-  h,
-  alt,
-});
+// Interests, as listed in Riti's brief for this site.
+export const INTERESTS = [
+  'Artificial intelligence',
+  'Machine learning',
+  'Natural language processing',
+  'Intelligent systems',
+  'Analytical problem-solving',
+];
 
-export const PHOTOS = {
-  tower: img('brutalist-tower', 1280, 1600),
-  columns: img('window-columns', 1280, 851),
-  stair: img('stair-diagonal', 1280, 933),
-  spiral: img('spiral-facade', 1280, 853),
-  atrium: img('angular-atrium', 1280, 1920),
-  stack: img('window-stack', 1280, 855),
-  corridor: img('concrete-corridor', 1280, 853),
-  monolith: img('concrete-monolith', 1280, 853),
-  corner: img('angular-corner', 1280, 853),
-  balcony: img('balcony-grid', 1280, 853),
-  loggia: img('concrete-loggia', 1280, 1827),
+// Portrait supplied by Riti; cropped only (see scripts/process-images.mjs).
+export const PORTRAIT = {
+  src: '/images/portrait/riti-shah.webp',
+  w: 301,
+  h: 376,
+  alt: 'Portrait of Riti Shah, smiling, in a checked blazer against a dark curtain',
 };

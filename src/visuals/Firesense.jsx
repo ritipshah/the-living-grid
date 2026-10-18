@@ -1,12 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
-import session from '../data/firesense-session.json';
+import { ROWS, T_MAX } from '../data/firesense.js';
 
-// Real captured session from the Firesense repository
-// (data/real_session_20260905.csv), converted by a one-off script.
-const ROWS = session.rows.map(([t, gas, temp, hum, score, level, sig, naive, sup]) => ({
-  t, gas, temp, hum, score, level, sig, naive, sup,
-}));
-const T_MAX = ROWS.at(-1).t;
 const GAS_MAX = 1500;
 const LEVELS = ['Normal', 'Warning', 'Critical'];
 const NAIVE_PPM = 450; // NAIVE_GAS_THRESHOLD_PPM in config.py

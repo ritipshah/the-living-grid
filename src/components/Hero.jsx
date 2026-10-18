@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PHOTOS } from '../data/site.js';
+import { FRAMES, TechFrame } from '../visuals/Frames.jsx';
 import { PROJECTS } from '../data/projects.js';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion.js';
 import { useMedia } from '../hooks/useMedia.js';
@@ -19,17 +19,15 @@ const SPANS = {
   index: [10, 13, 5, 7],
 };
 
-// Each photo tile cycles through its own small pool of frames.
+// Each frame tile cycles through its own small pool of technical frames.
 const POOLS = {
-  a: ['tower', 'loggia', 'atrium'],
-  b: ['columns', 'balcony', 'stack'],
-  c: ['stair', 'corridor', 'monolith'],
-  d: ['spiral', 'corner', 'stack'],
+  a: ['graph', 'samples', 'source'],
+  b: ['gas', 'matrix', 'ledger'],
+  c: ['barcode', 'condense', 'risk'],
+  d: ['climate', 'ledger', 'graph'],
 };
-const FRAME_NO = {
-  tower: '03', loggia: '11', atrium: '02', columns: '12', balcony: '10',
-  stack: '04', stair: '08', corridor: '05', monolith: '07', spiral: '01', corner: '09',
-};
+// Design size of each tile's frame (CSS scales it to the tile).
+const SIZE = { a: [300, 480], b: [340, 260], c: [220, 420], d: [340, 260] };
 const CYCLE_ORDER = ['a', 'c', 'b', 'd'];
 const CYCLE_MS = 4200;
 
@@ -39,27 +37,19 @@ function tracks(n, start, end, grow) {
   ).join(' ');
 }
 
-function PhotoTile({ id, photoKey, prevKey, live, onEnter }) {
-  const p = PHOTOS[photoKey];
-  const prev = prevKey ? PHOTOS[prevKey] : null;
+function FrameTile({ id, frameKey, prevKey, live, onEnter }) {
+  const f = FRAMES[frameKey];
+  const [w, h] = SIZE[id];
   return (
     <div className={`hero__tile hero__tile--photo hero__${id}`} onPointerEnter={onEnter} aria-hidden="true">
-      {prev && (
-        <img className="hero__img hero__img--prev" src={prev.src} srcSet={prev.srcSet} sizes="(min-width: 1100px) 25vw, 50vw" alt="" width={prev.w} height={prev.h} />
-      )}
-      <img
-        key={photoKey}
-        className={`hero__img ${prev ? 'hero__img--in' : ''}`}
-        src={p.src}
-        srcSet={p.srcSet}
-        sizes="(min-width: 1100px) 25vw, 50vw"
-        alt=""
-        width={p.w}
-        height={p.h}
-        fetchPriority={id === 'a' ? 'high' : undefined}
-      />
+      {prevKey && <TechFrame name={prevKey} w={w} h={h} className="hero__img hero__img--prev" />}
+      <TechFrame key={frameKey} name={frameKey} w={w} h={h} className={`hero__img ${prevKey ? 'hero__img--in' : ''}`} />
       <span className={`hero__frame label ${live ? 'is-live' : ''}`}>
-        <span className="marker" /> Fr. {FRAME_NO[photoKey]}
+        <span className="marker" />
+        <span>
+          Fr. {f.no} · {f.title}
+          <small>{f.source}</small>
+        </span>
       </span>
     </div>
   );
@@ -135,8 +125,8 @@ export default function Hero() {
         <p className="hero__word-foot label">Data Science · NMIMS · Mumbai</p>
       </div>
 
-      <PhotoTile id="a" photoKey={POOLS.a[frames.a]} prevKey={prev.a} live={live === 'a'} onEnter={enter('a')} />
-      <PhotoTile id="b" photoKey={POOLS.b[frames.b]} prevKey={prev.b} live={live === 'b'} onEnter={enter('b')} />
+      <FrameTile id="a" frameKey={POOLS.a[frames.a]} prevKey={prev.a} live={live === 'a'} onEnter={enter('a')} />
+      <FrameTile id="b" frameKey={POOLS.b[frames.b]} prevKey={prev.b} live={live === 'b'} onEnter={enter('b')} />
 
       <div className="hero__tile hero__title" onPointerEnter={enter('title')}>
         <span className="label label--accent">
@@ -146,7 +136,7 @@ export default function Hero() {
           <span className="serif">The</span> Living Grid
         </p>
         <p className="hero__title-note">
-          A contact sheet of four projects. Frames shift as you look; each one opens into a full case study.
+          A contact sheet of four projects, drawn from their data, rules and structures. Frames shift as you look; each project opens into a full case study.
         </p>
       </div>
 
@@ -165,8 +155,8 @@ export default function Hero() {
         </div>
       </div>
 
-      <PhotoTile id="c" photoKey={POOLS.c[frames.c]} prevKey={prev.c} live={live === 'c'} onEnter={enter('c')} />
-      <PhotoTile id="d" photoKey={POOLS.d[frames.d]} prevKey={prev.d} live={live === 'd'} onEnter={enter('d')} />
+      <FrameTile id="c" frameKey={POOLS.c[frames.c]} prevKey={prev.c} live={live === 'c'} onEnter={enter('c')} />
+      <FrameTile id="d" frameKey={POOLS.d[frames.d]} prevKey={prev.d} live={live === 'd'} onEnter={enter('d')} />
 
       <nav className="hero__tile hero__index" aria-label="Projects" onPointerEnter={enter('index')}>
         <span className="label">Index · 01–04</span>

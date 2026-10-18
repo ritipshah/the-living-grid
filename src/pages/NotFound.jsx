@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
-import { PHOTOS } from '../data/site.js';
+import { TechFrame } from '../visuals/Frames.jsx';
 import { useDocumentMeta } from '../hooks/useDocumentMeta.js';
 
 export default function NotFound() {
   useDocumentMeta('Frame not found — Riti Shah');
-  const p = PHOTOS.corridor;
   return (
     <section className="nf shell" aria-labelledby="nf-title">
       <div className="nf__tile nf__tile--missing">
@@ -27,7 +26,7 @@ export default function NotFound() {
         </div>
       </div>
       <div className="nf__tile nf__tile--photo" aria-hidden="true">
-        <img src={p.src} srcSet={p.srcSet} sizes="50vw" alt="" width={p.w} height={p.h} />
+        <TechFrame name="samples" w={360} h={520} />
       </div>
     </section>
   );
